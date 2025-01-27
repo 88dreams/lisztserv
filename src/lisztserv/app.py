@@ -7,7 +7,7 @@ import logging
 import asyncio
 from datetime import datetime
 import webview
-from spotscrape import (
+from lisztserv import (
     scan_spotify_links,
     scan_webpage,
     create_playlist,
@@ -19,20 +19,20 @@ from queue import Queue
 import signal
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from spotscrape import SpotifySearchManager, PlaylistManager, WebContentExtractor, ContentProcessor
+from lisztserv import SpotifySearchManager, PlaylistManager, WebContentExtractor, ContentProcessor
 from functools import wraps
 from jinja2 import FileSystemLoader, Environment
 import atexit
 import time
-from spotscrape.message_handler import gui_message, send_progress, message_queue, progress_queue
+from lisztserv.message_handler import gui_message, send_progress, message_queue, progress_queue
 from pathlib import Path
 from typing import Dict, Tuple
 
 """
 File Structure:
-/SpotScrape_data/
-    spotscrape_gpt.json  - Results from GPT scanning
-    spotscrape_url.json  - Results from URL scanning
+/LisztServ_data/
+    lisztserv_gpt.json  - Results from GPT scanning
+    lisztserv_url.json  - Results from URL scanning
 /logs/
     spot-debug-*.log     - Debug logging
     spot-spotify-*.log   - Spotify operations
@@ -273,15 +273,15 @@ def setup_logging():
     
     return logger, spotify_logger
 
-# Make logger global in spotscrape module
-import spotscrape
-spotscrape.logger = None
-spotscrape.spotify_logger = None
+# Make logger global in lisztserv module
+import lisztserv
+lisztserv.logger = None
+lisztserv.spotify_logger = None
 
 # Initialize loggers
 logger, spotify_logger = setup_logging()
-spotscrape.logger = logger
-spotscrape.spotify_logger = spotify_logger
+lisztserv.logger = logger
+lisztserv.spotify_logger = spotify_logger
 
 # Store window reference
 window = None
@@ -292,8 +292,8 @@ scan_results = {
     'url': {'status': 'idle', 'albums': [], 'error': None}
 }
 
-# Override the user_message in spotscrape
-spotscrape.user_message = gui_message
+# Override the user_message in lisztserv
+lisztserv.user_message = gui_message
 
 def async_route(f):
     @wraps(f)
@@ -451,13 +451,13 @@ async def scan_url():
             # Save results to file
             if getattr(sys, 'frozen', False):
                 # Running as executable - use Documents folder
-                data_dir = os.path.join(os.path.expanduser('~'), 'Documents', 'SpotScrape', 'data')
+                data_dir = os.path.join(os.path.expanduser('~'), 'Documents', 'LisztServ', 'data')
             else:
                 # Running as script - use source directory
-                data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SpotScrape_data"))
+                data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "LisztServ_data"))
             
             os.makedirs(data_dir, exist_ok=True)
-            url_file = os.path.join(data_dir, "spotscrape_url.json")
+            url_file = os.path.join(data_dir, "lisztserv_url.json")
             
             try:
                 with open(url_file, 'w', encoding='utf-8') as f:
@@ -536,12 +536,12 @@ def scan_gpt():
             gpt_logger.error("No URL provided")
             return jsonify({'error': 'URL is required'}), 400
             
-        # Create SpotScrape_data directory if it doesn't exist
-        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SpotScrape_data"))
+        # Create LisztServ_data directory if it doesn't exist
+        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "LisztServ_data"))
         os.makedirs(data_dir, exist_ok=True)
         
         # Default file path for GPT scan results
-        destination_file = os.path.normpath(os.path.join(data_dir, "spotscrape_gpt.json"))
+        destination_file = os.path.normpath(os.path.join(data_dir, "lisztserv_gpt.json"))
         gpt_logger.debug(f"Using destination file: {destination_file}")
         
         # Reset results
@@ -651,10 +651,10 @@ async def create_playlist():
             return jsonify({'error': 'No albums selected'}), 400
 
         if not playlist_name:
-            playlist_name = "SpotScrape Playlist"
+            playlist_name = "LisztServ Playlist"
             
         if not playlist_description:
-            playlist_description = "Created with SpotScrape"
+            playlist_description = "Created with LisztServ"
 
         # Initialize managers
         playlist_manager = PlaylistManager()
@@ -821,12 +821,12 @@ async def scan_webpage_route():
             'error': None
         }
         
-        # Create SpotScrape_data directory if it doesn't exist
-        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SpotScrape_data"))
+        # Create LisztServ_data directory if it doesn't exist
+        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "LisztServ_data"))
         os.makedirs(data_dir, exist_ok=True)
         
         # Default file path for GPT scan results
-        destination_file = os.path.normpath(os.path.join(data_dir, "spotscrape_gpt.json"))
+        destination_file = os.path.normpath(os.path.join(data_dir, "lisztserv_gpt.json"))
         debug_logger.debug(f"Using destination file: {destination_file}")
         
         gui_message("Starting GPT scan...")
@@ -1188,7 +1188,7 @@ def main():
         debug_logger.debug("Flask server thread started")
         
         # Create and start webview window with close handler
-        window = webview.create_window('SpotScrape', 'http://localhost:5000',
+        window = webview.create_window('LisztServ', 'http://localhost:5000',
                                      width=1200, height=850,
                                      min_size=(1000, 750))
         

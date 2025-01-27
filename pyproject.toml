@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spotscrape"
+name = "lisztserv"
 version = "1.0.0"
 description = "A tool for scraping music information and creating Spotify playlists"
 readme = "README.md"
@@ -43,20 +43,21 @@ unix = [
 ]
 
 [project.scripts]
-spotscrape = "spotscrape.app:main"
-spotscrape-gui = "spotscrape.app:main"
+lisztserv = "lisztserv.app:main"
+lisztserv-gui = "lisztserv.app:main"
 
 [tool.setuptools]
 include-package-data = true
 package-dir = {"" = "src"}
+packages = ["lisztserv"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["spotscrape*"]
+include = ["lisztserv*"]
 exclude = ["tests*"]
 
 [tool.setuptools.package-data]
-"spotscrape" = [
+"lisztserv" = [
     "frontend/static/css/*",
     "frontend/static/js/*",
     "frontend/templates/*",

@@ -1,7 +1,7 @@
-# SpotScrape Documentation
+# LisztServ Documentation
 
 ## Project Overview
-SpotScrape is a web application that extracts and processes music-related content from web pages, integrating with Spotify for playlist management and OpenAI's GPT for content analysis.
+LisztServ is a web application that extracts and processes music-related content from web pages, integrating with Spotify for playlist management and OpenAI's GPT for content analysis.
 
 ## Architecture
 
@@ -9,7 +9,7 @@ SpotScrape is a web application that extracts and processes music-related conten
 
 #### Frontend Layer
 - **Technology**: Flask-based web application
-- **Location**: `src/spotscrape/frontend/`
+- **Location**: `src/lisztserv/frontend/`
 - **Key Files**:
   - `templates/index.html`: Main UI template
   - `static/js/app.js`: Frontend logic
@@ -38,8 +38,8 @@ SpotScrape is a web application that extracts and processes music-related conten
 
 ### File Structure
 ```
-spotscrape/
-├── src/spotscrape/
+lisztserv/
+├── src/lisztserv/
 │   ├── app.py           # Main Flask application
 │   ├── core.py          # Core functionality
 │   ├── utils.py         # Utility functions

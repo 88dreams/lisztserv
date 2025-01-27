@@ -4,8 +4,8 @@ include requirements.txt
 include config.json.example
 include .env.example
 
-recursive-include src/spotscrape/frontend/static *
-recursive-include src/spotscrape/frontend/templates *
+recursive-include src/lisztserv/frontend/static *
+recursive-include src/lisztserv/frontend/templates *
 
 global-exclude *.pyc
 global-exclude *.pyo

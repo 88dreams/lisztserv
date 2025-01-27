@@ -204,7 +204,7 @@ def build_standalone(dev_mode=False):
         
         # Set up paths - ensure all paths are absolute
         base_dir = Path(__file__).parent.resolve()  # Project root
-        src_dir = (base_dir / 'src' / 'spotscrape').resolve()  # Source package
+        src_dir = (base_dir / 'src' / 'lisztserv').resolve()  # Source package
         dist_dir = (base_dir / 'dist').resolve()  # Build output
         build_dir = (base_dir / 'build').resolve()  # Build temp
         
@@ -255,7 +255,7 @@ def build_standalone(dev_mode=False):
         # Base PyInstaller arguments
         args = [
             str(src_dir / 'app.py'),
-            '--name=spotscrape',
+            '--name=lisztserv',
             '--onedir',
             '--clean',
             '--noconfirm',
@@ -318,7 +318,7 @@ def build_standalone(dev_mode=False):
         PyInstaller.__main__.run(args)
         
         # Verify build was created
-        app_dir = (dist_dir / 'spotscrape').resolve()
+        app_dir = (dist_dir / 'lisztserv').resolve()
         if not app_dir.exists():
             raise FileNotFoundError(f"Build directory not created: {app_dir}")
             
@@ -329,9 +329,9 @@ def build_standalone(dev_mode=False):
             
         # Verify the executable was created
         if sys.platform.startswith('win'):
-            exe_path = app_dir / 'spotscrape.exe'
+            exe_path = app_dir / 'lisztserv.exe'
         else:
-            exe_path = app_dir / 'spotscrape'
+            exe_path = app_dir / 'lisztserv'
             
         if not exe_path.exists():
             raise FileNotFoundError(f"Executable not created: {exe_path}")

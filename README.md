@@ -1,6 +1,6 @@
-# SpotScrape
+# LisztServ
 
-SpotScrape is a modern desktop application that helps you discover and create Spotify playlists from web content. It uses both direct URL scanning and AI-powered content analysis to find and organize music.
+LisztServ is a modern desktop application that helps you discover and create Spotify playlists from web content. It uses both direct URL scanning and AI-powered content analysis to find and organize music into playlists.
 
 ## Features
 
@@ -21,8 +21,8 @@ SpotScrape is a modern desktop application that helps you discover and create Sp
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/88dreams/spotscrape.git
-   cd spotscrape
+   git clone https://github.com/88dreams/lisztserv.git
+   cd lisztserv
    ```
 
 2. **Create and Activate Virtual Environment**
@@ -61,7 +61,7 @@ SpotScrape is a modern desktop application that helps you discover and create Sp
 1. **Start the Application**
    ```bash
    # From the project root directory
-   python -m spotscrape
+   python -m lisztserv
    ```
 
 2. **First-Time Setup**
@@ -111,7 +111,7 @@ SpotScrape is a modern desktop application that helps you discover and create Sp
    - Ensure OpenAI API key is valid (for GPT scanning)
 
 ### Error Logs
-- Check logs in `src/spotscrape/logs/` directory
+- Check logs in `src/lisztserv/logs/` directory
 - Debug logs are named `spot-debug-YYYYMMDD.log`
 - Spotify-specific logs are in `spot-spotify-YYYYMMDD.log`
 
@@ -121,15 +121,12 @@ For developers who want to contribute:
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/yourusername/spotscrape.git
-   cd spotscrape
+   git clone https://github.com/yourusername/lisztserv.git
+   cd lisztserv
    ```
 
 2. **Create Development Branch**
-   ```bash
-   git checkout -b feature/your-feature-name
    ```
-
 3. **Install Development Dependencies**
    ```bash
    pip install -r requirements-dev.txt
@@ -150,3 +147,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - UI powered by [Flask](https://flask.palletsprojects.com/) and [pywebview](https://pywebview.flowrl.com/)
 - AI features powered by [OpenAI](https://openai.com/)
    
+
