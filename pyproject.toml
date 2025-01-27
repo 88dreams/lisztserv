@@ -55,7 +55,6 @@ lisztserv-gui = "lisztserv.app:main"
 [tool.setuptools]
 include-package-data = true
 package-dir = {"" = "src"}
-packages = ["lisztserv"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
