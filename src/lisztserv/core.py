@@ -37,11 +37,11 @@ import threading
 from tqdm import tqdm
 
 # Internal imports
-from spotscrape.utils import setup_logging
-from spotscrape.spotify_manager import SpotifySearchManager
-from spotscrape.web_extractor import WebContentExtractor
-from spotscrape.content_processor import ContentProcessor
-from spotscrape.message_handler import gui_message, send_progress, progress_queue
+from lisztserv.utils import setup_logging
+from lisztserv.spotify_manager import SpotifySearchManager
+from lisztserv.web_extractor import WebContentExtractor
+from lisztserv.content_processor import ContentProcessor
+from lisztserv.message_handler import gui_message, send_progress, progress_queue
 
 # Initialize logger
 logger = logging.getLogger(__name__)
