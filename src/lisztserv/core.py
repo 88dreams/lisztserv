@@ -1,5 +1,5 @@
 """
-Core functionality for SpotScrape
+Core functionality for LisztServ
 """
 import logging
 from logging.handlers import RotatingFileHandler
@@ -572,9 +572,9 @@ def get_next_log_number() -> int:
     os.makedirs(log_dir, exist_ok=True)
     
     # Use list comprehension for better performance
-    log_files = [(os.path.getmtime(os.path.join(log_dir, f"spotscraper{i}.log")), i) 
+    log_files = [(os.path.getmtime(os.path.join(log_dir, f"lisztserv{i}.log")), i) 
                  for i in range(10) 
-                 if os.path.exists(os.path.join(log_dir, f"spotscraper{i}.log"))]
+                 if os.path.exists(os.path.join(log_dir, f"lisztserv{i}.log"))]
     
     if not log_files:
         return 0
@@ -971,12 +971,12 @@ async def scan_spotify_links(url: str, destination_file: str = None):
     extractor = WebContentExtractor()
     try:
         # Ensure we're using the correct data directory
-        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SpotScrape_data"))
+        data_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "LisztServ_data"))
         os.makedirs(data_dir, exist_ok=True)
         
         # If no destination file specified, use default
         if not destination_file:
-            destination_file = os.path.normpath(os.path.join(data_dir, "spotscrape_url.json"))
+            destination_file = os.path.normpath(os.path.join(data_dir, "lisztserv_url.json"))
         
         logger.debug(f"Using destination file: {destination_file}")
         
@@ -1221,7 +1221,7 @@ async def create_playlist(json_file: str, playlist_name: str = None):
             default_name = f"{'Sampler ' if is_sampler else ''}Playlist {datetime.now().strftime('%Y%m%d_%H%M%S')}"
             playlist_name = input(f"\nEnter playlist name (default: {default_name}): ").strip() or default_name
 
-        description = f"{'Sampler playlist' if is_sampler else 'Full playlist'} created by SpotScrape on {datetime.now().strftime('%Y-%m-%d')}"
+        description = f"{'Sampler playlist' if is_sampler else 'Full playlist'} created by LisztServ on {datetime.now().strftime('%Y-%m-%d')}"
         
         # Initialize managers
         playlist_manager = PlaylistManager()
@@ -1359,7 +1359,7 @@ async def main():
         os.makedirs(json_dir, exist_ok=True)
 
         while True:
-            user_message("\nSpotScraper Menu:")
+            user_message("\nLisztServ Menu:")
             user_message("1. Scan webpage for Spotify links")
             user_message("2. Scan webpage for music content")
             user_message("3. Create Spotify playlist from JSON")
@@ -1373,7 +1373,7 @@ async def main():
                     user_message("No URL provided")
                     continue
 
-                default_path = os.path.normpath(os.path.join(json_dir, "spotscrape_url.json"))
+                default_path = os.path.normpath(os.path.join(json_dir, "lisztserv_url.json"))
                 
                 user_message("\nWhere would you like to save the results?")
                 user_message(f"1. Default location ({default_path})")
@@ -1406,7 +1406,7 @@ async def main():
                     user_message("No URL provided")
                     continue
 
-                default_path = os.path.normpath(os.path.join(json_dir, "spotscrape_gpt.json"))
+                default_path = os.path.normpath(os.path.join(json_dir, "lisztserv_gpt.json"))
                 
                 user_message("\nWhere would you like to save the results?")
                 user_message(f"1. Default location ({default_path})")
@@ -1435,8 +1435,8 @@ async def main():
 
             elif choice == "3":
                 # Show both default files as options
-                url_default = os.path.normpath(os.path.join(json_dir, "spotscrape_url.json"))
-                gpt_default = os.path.normpath(os.path.join(json_dir, "spotscrape_gpt.json"))
+                url_default = os.path.normpath(os.path.join(json_dir, "lisztserv_url.json"))
+                gpt_default = os.path.normpath(os.path.join(json_dir, "lisztserv_gpt.json"))
                 
                 user_message("\nEnter the path to your JSON file:")
                 user_message(f"1. URL scan results ({url_default})")

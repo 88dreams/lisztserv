@@ -1,3 +1,3 @@
 """
-Test suite for the spotscrape package.
+Test suite for the lisztserv package.
 """ 

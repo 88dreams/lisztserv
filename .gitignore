@@ -32,7 +32,7 @@ virtual/
 # Logs and data
 logs/
 *.log
-src/SpotScrape_data/
+src/LisztServ_data/
 *.json
 !config.json.example
 

@@ -1,5 +1,5 @@
 """
-Message handling functionality for SpotScrape
+Message handling functionality for LisztServ
 """
 import logging
 from datetime import datetime

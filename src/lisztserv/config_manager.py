@@ -26,7 +26,7 @@ class ConfigManager:
         self._load_environment()
         
         # Development mode check
-        self.dev_mode = os.getenv('SPOTSCRAPE_DEV', '0').lower() in ('1', 'true', 'yes')
+        self.dev_mode = os.getenv('LISZTSERV_DEV', '0').lower() in ('1', 'true', 'yes')
         if self.dev_mode:
             logger.info("Running in development mode")
             self._load_dev_config()
@@ -38,7 +38,7 @@ class ConfigManager:
         """Load environment variables with enhanced logging"""
         try:
             # First try user's home directory
-            env_file = Path.home() / '.spotscrape' / '.env'
+            env_file = Path.home() / '.lisztserv' / '.env'
             logger.info(f"Checking for .env file in home directory: {env_file}")
             if env_file.exists():
                 logger.info(f"Loading .env from home directory: {env_file}")
@@ -105,7 +105,7 @@ class ConfigManager:
             base_dir = Path(sys._MEIPASS)
         else:
             # Running as script
-            base_dir = Path.home() / '.spotscrape'
+            base_dir = Path.home() / '.lisztserv'
         
         base_dir.mkdir(parents=True, exist_ok=True)
         return base_dir

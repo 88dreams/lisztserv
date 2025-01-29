@@ -25,7 +25,7 @@ class SetupHandler:
         html_content = self._get_setup_html()
         
         # Create a temporary HTML file in the user's config directory
-        config_dir = Path.home() / '.spotscrape'
+        config_dir = Path.home() / '.lisztserv'
         config_dir.mkdir(parents=True, exist_ok=True)
         setup_html = config_dir / 'setup.html'
         
@@ -34,7 +34,7 @@ class SetupHandler:
         
         # Create the setup window
         self.window = webview.create_window(
-            'SpotScrape Setup',
+            'LisztServ Setup',
             url=setup_html.as_uri(),
             width=800,
             height=600,
@@ -59,7 +59,7 @@ class SetupHandler:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpotScrape Setup</title>
+    <title>LisztServ Setup</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -125,7 +125,7 @@ class SetupHandler:
 </head>
 <body>
     <div class="container">
-        <h1>SpotScrape Setup</h1>
+        <h1>LisztServ Setup</h1>
         <form id="setupForm">
             <div class="form-group">
                 <label for="clientId">Spotify Client ID</label>
