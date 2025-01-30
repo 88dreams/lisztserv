@@ -12,9 +12,6 @@ from lisztserv.database.models import User, UsageRecord, Payment, UserCredits
 # access to the values within the .ini file in use.
 config = context.config
 
-# Override sqlalchemy.url with our database URL
-config.set_main_option('sqlalchemy.url', get_database_url())
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -42,7 +39,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_database_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -61,14 +58,14 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # Add SSL configuration for cloud databases if needed
+    # Use raw config to avoid interpolation issues with special characters
+    configuration = config.get_section(config.config_ini_section)
+    configuration["sqlalchemy.url"] = get_database_url()
+    
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
-        connect_args={
-            "sslmode": os.environ.get("DB_SSL_MODE", "prefer"),
-        } if os.environ.get("DB_SSL_ENABLED", "false").lower() == "true" else {}
     )
 
     with connectable.connect() as connection:
