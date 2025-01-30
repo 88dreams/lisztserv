@@ -28,6 +28,7 @@ from lisztserv.message_handler import gui_message, send_progress, message_queue,
 from pathlib import Path
 from typing import Dict, Tuple
 from .auth.routes import auth_bp
+from .payments.routes import payments_bp
 
 """
 File Structure:
@@ -1141,6 +1142,7 @@ def api_save_credentials():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(payments_bp)
 
 def main():
     """Entry point for the application"""
