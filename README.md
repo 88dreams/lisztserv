@@ -17,7 +17,7 @@ LisztServ is a modern desktop application that helps you discover and create Spo
 - OpenAI API Key (for AI-powered scanning)
 - Git (for cloning the repository)
 
-## Setup Instructions
+## Quick Start
 
 1. **Clone the Repository**
    ```bash
@@ -28,12 +28,12 @@ LisztServ is a modern desktop application that helps you discover and create Spo
 2. **Create and Activate Virtual Environment**
    ```bash
    # Windows
-   python -m venv venv
-   .\venv\Scripts\activate
+   python -m venv virtual
+   .\virtual\Scripts\activate
 
    # macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
+   python3 -m venv virtual
+   source virtual/bin/activate
    ```
 
 3. **Install Dependencies**
@@ -41,105 +41,34 @@ LisztServ is a modern desktop application that helps you discover and create Spo
    pip install -r requirements.txt
    ```
 
-4. **Configure API Keys**
-   - Copy the example configuration file:
-     ```bash
-     cp config.json.example config.json
-     ```
-   - Edit `config.json` and add your API keys:
-     - Spotify API credentials (from [Spotify Developer Dashboard](https://developer.spotify.com/dashboard))
-     - OpenAI API key (from [OpenAI Platform](https://platform.openai.com/api-keys))
+4. **Configure Environment Variables**
+   Copy `.env.example` to `.env` and update with your credentials:
+   ```
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   SPOTIFY_REDIRECT_URI=http://localhost:8888/callback
+   OPENAI_API_KEY=your_openai_api_key
+   ```
 
-5. **Spotify Developer Setup**
-   1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-   2. Create a new application
-   3. Add `http://localhost:8888/callback` to the Redirect URIs
-   4. Copy the Client ID and Client Secret to your `config.json`
-
-## Running the Application
-
-1. **Start the Application**
+5. **Run the Application**
    ```bash
-   # From the project root directory
    python -m lisztserv
    ```
 
-2. **First-Time Setup**
-   - On first run, you'll need to authorize the application with Spotify
-   - A browser window will open for authentication
-   - After authorizing, you can close the browser window
+## Documentation
 
-## Usage Guide
+- For detailed usage instructions, see the [Usage Guide](MASTER_DOCUMENTATION.md#usage-guide)
+- For development setup, see the [Development Guide](MASTER_DOCUMENTATION.md#development-guidelines)
+- For troubleshooting, see the [Troubleshooting Guide](MASTER_DOCUMENTATION.md#troubleshooting)
+- For system architecture and API documentation, see [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md)
 
-### URL Scanning
-1. Enter a URL containing Spotify album links
-2. Click "Scan URL"
-3. Review the found albums
-4. Select albums to include in playlist
-5. Click "Create Playlist"
+## Contributing
 
-### AI-Powered Scanning
-1. Enter a URL containing music content
-2. Select "GPT Scan" option
-3. Wait for the AI to analyze the content
-4. Review the found albums
-5. Create your playlist
-
-### Playlist Creation Options
-- Include all tracks from albums
-- Include only the most popular track
-- Include only the first track
-- Customize playlist name and description
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Application Won't Start**
-   - Check if all dependencies are installed
-   - Verify `config.json` exists and is properly formatted
-   - Ensure Python version is 3.8 or higher
-
-2. **Authentication Errors**
-   - Verify Spotify API credentials
-   - Check redirect URI in Spotify Developer Dashboard
-   - Delete `.cache` file and try again
-
-3. **Scanning Issues**
-   - Check internet connection
-   - Verify URL is accessible
-   - Ensure OpenAI API key is valid (for GPT scanning)
-
-### Error Logs
-- Check logs in `src/lisztserv/logs/` directory
-- Debug logs are named `spot-debug-YYYYMMDD.log`
-- Spotify-specific logs are in `spot-spotify-YYYYMMDD.log`
-
-## Development Setup
-
-For developers who want to contribute:
-
-1. **Fork and Clone**
-   ```bash
-   git clone https://github.com/yourusername/lisztserv.git
-   cd lisztserv
-   ```
-
-2. **Create Development Branch**
-   ```
-3. **Install Development Dependencies**
-   ```bash
-   pip install -r requirements-dev.txt
-   ```
-
-4. **Run Tests**
-   ```bash
-   pytest
-   ```
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 

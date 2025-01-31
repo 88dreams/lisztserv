@@ -29,6 +29,8 @@ from pathlib import Path
 from typing import Dict, Tuple
 from .auth.routes import auth_bp
 from .payments.routes import payments_bp
+from .database import init_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
 """
 File Structure:
@@ -1143,6 +1145,34 @@ def api_save_credentials():
 
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(payments_bp)
+
+def create_app(test_config=None):
+    """Create and configure the Flask application."""
+    app = Flask(__name__)
+    CORS(app)
+
+    # Load default configuration
+    app.config.from_mapping(
+        SECRET_KEY=os.getenv('SECRET_KEY', 'dev'),
+        DATABASE_URL=os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///app.db'),
+        STRIPE_SECRET_KEY=os.getenv('STRIPE_SECRET_KEY'),
+        STRIPE_WEBHOOK_SECRET=os.getenv('STRIPE_WEBHOOK_SECRET')
+    )
+
+    if test_config is not None:
+        # Load test configuration if passed in
+        app.config.update(test_config)
+
+    # Initialize database
+    engine, async_session = init_db(app.config['DATABASE_URL'])
+    app.config['DB_ENGINE'] = engine
+    app.config['DB_SESSION'] = async_session
+
+    # Register blueprints
+    from .routes import api
+    app.register_blueprint(api.bp)
+
+    return app
 
 def main():
     """Entry point for the application"""

@@ -1,16 +1,30 @@
 include LICENSE
 include README.md
+include MASTER_DOCUMENTATION.md
+include CONTRIBUTING.md
+include pyproject.toml
 include requirements.txt
-include config.json.example
+include requirements-test.txt
 include .env.example
+include alembic.ini
 
-recursive-include src/lisztserv/frontend/static *
 recursive-include src/lisztserv/frontend/templates *
+recursive-include src/lisztserv/frontend/static *
+recursive-include migrations *
 
-global-exclude *.pyc
-global-exclude *.pyo
-global-exclude *.pyd
-global-exclude __pycache__
-global-exclude *.so
-global-exclude *.log
-global-exclude .git* 
+exclude .gitignore
+exclude .coverage
+exclude test.db
+exclude test_results.log
+exclude *.pyc
+exclude __pycache__
+exclude *.spec
+exclude build_standalone.py
+exclude hook-lisztserv.py
+
+prune tests
+prune htmlcov
+prune .pytest_cache
+prune .benchmarks
+prune logs
+prune virtual 

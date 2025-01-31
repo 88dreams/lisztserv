@@ -5,6 +5,7 @@ import os
 from urllib.parse import quote_plus
 from dotenv import load_dotenv
 from pathlib import Path
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 # Load environment variables
 env_path = Path(__file__).parent.parent.parent.parent / '.env'
@@ -70,6 +71,16 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def init_db(database_url: str):
+    """Initialize the database with async support."""
+    engine = create_async_engine(database_url)
+    async_session = sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False
+    )
+    return engine, async_session
 
 def init_db():
     """Initialize database tables."""

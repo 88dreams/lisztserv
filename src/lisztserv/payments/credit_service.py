@@ -3,32 +3,39 @@ from datetime import datetime
 from typing import Optional, Tuple
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func
 from ..database.models import User, UserCredits, Payment, UsageRecord
 
 class CreditService:
     def __init__(self, db: Session):
         self.db = db
     
-    def get_user_credits(self, user_id: str) -> Optional[Decimal]:
+    async def get_user_credits(self, user_id: str) -> Optional[Decimal]:
         """Get current credit balance for a user."""
         try:
             credits = self.db.query(UserCredits).filter(UserCredits.user_id == user_id).first()
             return Decimal(str(credits.balance)) if credits else Decimal('0')
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
             raise ValueError(f"Error getting user credits: {str(e)}")
     
-    def add_credits(self, user_id: str, amount: Decimal, payment_id: Optional[str] = None) -> Tuple[bool, str]:
+    async def add_credits(self, user_id: str, amount: Decimal, payment_id: Optional[str] = None) -> Tuple[bool, str]:
         """Add credits to a user's balance."""
         try:
             credits = self.db.query(UserCredits).filter(UserCredits.user_id == user_id).first()
             
             if not credits:
                 # Initialize credits if they don't exist
-                credits = UserCredits(user_id=user_id, balance=amount)
+                credits = UserCredits(
+                    user_id=user_id,
+                    balance=float(amount)  # Convert Decimal to float for storage
+                )
                 self.db.add(credits)
             else:
-                credits.balance += amount
+                # Convert stored float to Decimal, add the new amount, then convert back to float
+                current_balance = Decimal(str(credits.balance))
+                new_balance = current_balance + amount
+                credits.balance = float(new_balance)
                 credits.last_updated = datetime.utcnow()
             
             # Record the payment if payment_id is provided
@@ -37,46 +44,63 @@ class CreditService:
                 if payment:
                     payment.status = 'completed'
             
-            self.db.commit()
+            try:
+                await self.db.commit()
+            except Exception as e:
+                await self.db.rollback()
+                return False, f"Database error: {str(e)}"
+                
             return True, f"Added {amount} credits successfully"
             
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
+            return False, f"Database error: {str(e)}"
+        except Exception as e:
+            await self.db.rollback()
             return False, f"Error adding credits: {str(e)}"
     
-    def deduct_credits(self, user_id: str, amount: Decimal, usage_type: str, metadata: dict = None) -> Tuple[bool, str]:
+    async def deduct_credits(self, user_id: str, amount: Decimal, usage_type: str, metadata: dict = None) -> Tuple[bool, str]:
         """Deduct credits from a user's balance and record usage."""
         try:
+            # Get initial state of credits
             credits = self.db.query(UserCredits).filter(UserCredits.user_id == user_id).first()
             
             if not credits:
                 return False, "No credits found for user"
             
-            if Decimal(str(credits.balance)) < amount:
-                return False, "Insufficient credits"
+            # Convert stored float to Decimal for comparison
+            current_balance = Decimal(str(credits.balance))
             
-            # Convert balance to Decimal for calculation
-            credits.balance = Decimal(str(credits.balance)) - amount
+            if current_balance < amount:
+                return False, f"Insufficient credits. Required: {amount}, Available: {current_balance}"
+            
+            # Perform the deduction
+            new_balance = current_balance - amount
+            credits.balance = float(new_balance)
             credits.last_updated = datetime.utcnow()
             
-            # Record usage
-            usage = UsageRecord(
+            # Record the usage
+            usage_record = UsageRecord(
                 user_id=user_id,
-                tokens_used=int(amount * 1000),  # Convert credits to tokens
-                cost=float(amount),  # Cost in credits
                 request_type=usage_type,
+                tokens_used=int(amount * 1000),
+                cost=float(amount),
                 usage_metadata=metadata
             )
-            self.db.add(usage)
+            self.db.add(usage_record)
             
-            self.db.commit()
-            return True, f"Deducted {amount} credits successfully"
+            try:
+                await self.db.commit()
+                return True, f"Deducted {amount} credits successfully"
+            except SQLAlchemyError as e:
+                await self.db.rollback()
+                return False, f"Database error during commit: {str(e)}"
             
         except SQLAlchemyError as e:
-            self.db.rollback()
+            await self.db.rollback()
             return False, f"Error deducting credits: {str(e)}"
     
-    def check_sufficient_credits(self, user_id: str, required_amount: Decimal) -> Tuple[bool, str]:
+    async def check_sufficient_credits(self, user_id: str, required_amount: Decimal) -> Tuple[bool, str]:
         """Check if user has sufficient credits for an operation."""
         try:
             credits = self.db.query(UserCredits).filter(UserCredits.user_id == user_id).first()

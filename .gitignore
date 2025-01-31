@@ -20,6 +20,53 @@ wheels/
 .installed.cfg
 *.egg
 
+# Virtual Environment
+virtual/
+venv/
+ENV/
+
+# Testing
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.benchmarks/
+test.db
+test_results.log
+.cache
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Application specific
+logs/
+*.log
+lisztserv.db
+spot-*.log
+
+# Build
+*.spec
+build/
+dist/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Operating System
+.DS_Store
+Thumbs.db
+
 # Environment variables and secrets
 .env
 .env.*

@@ -37,9 +37,8 @@ import threading
 from tqdm import tqdm
 
 # Internal imports
-from lisztserv.utils import setup_logging
+from lisztserv.utils import setup_logging, WebContentExtractor
 from lisztserv.spotify_manager import SpotifySearchManager
-from lisztserv.web_extractor import WebContentExtractor
 from lisztserv.content_processor import ContentProcessor
 from lisztserv.message_handler import gui_message, send_progress, progress_queue
 
